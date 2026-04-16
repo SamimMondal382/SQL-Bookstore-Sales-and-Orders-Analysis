@@ -165,3 +165,25 @@ SELECT B.BOOK_ID, B.TITLE, B.STOCK, COALESCE(SUM (O.QUANTITY),0) AS SOLD_STOCK, 
 FROM BOOKS B
 LEFT JOIN ORDERS O ON B.BOOK_ID = O.BOOK_ID
 GROUP BY B.BOOK_ID
+
+SELECT B.GENRE, SUM(O.TOTAL_AMOUNT) AS TOTAL_REVINUE
+FROM ORDERS O
+JOIN BOOKS B ON B.BOOK_ID = O.BOOK_ID
+GROUP BY GENRE
+ORDER BY TOTAL_REVINUE DESC;
+
+--21) Identified books/products that have not been sold for the last 90 day
+SELECT 
+    book_id,
+    MAX(order_date) AS last_sold_date
+FROM orders
+GROUP BY book_id
+HAVING MAX(order_date) - min(order_date) > 90
+
+SELECT 
+    book_id,
+    MAX(order_date) AS last_sold_date
+FROM orders
+GROUP BY book_id
+HAVING CURRENT_DATE - MAX(order_date) > 90;
+select max(order_date) from orders
